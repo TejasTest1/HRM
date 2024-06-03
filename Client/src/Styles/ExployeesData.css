@@ -1,0 +1,84 @@
+.tableControls {
+    cursor: pointer;
+    text-align: center;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchFilter {
+    display: flex;
+    align-items: center;
+}
+
+.searchFilter input{
+    padding: 0.5rem;
+    border: none;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.searchFilter button{
+    border: none;
+    height: 2.38rem;
+    width: 3rem;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    background-color: #cd2634;
+    cursor:pointer;
+}
+
+.selectFilter select {
+    padding: 0.5rem;
+}
+
+.selectFilter:first-child select {
+    padding: 0.5rem;
+    border-right: none;
+}
+
+.selectFilter:last-child select {
+    padding: 0.5rem;
+    border-left: none;
+}
+
+.empTable {  
+    border-collapse: collapse;
+}
+
+.empTable th {
+    padding: 1rem;
+    background-color: #cd2634;
+    color: aliceblue;
+}
+
+.empTable td {
+    padding: 1rem;
+}
+
+.paginationButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+
+.currPage {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.paginationButtons button {
+    padding: 0.7rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(185, 181, 181);
+}
+
+.currPage .active {
+    background-color: #cd2634;
+    color: aliceblue;
+    border: none;
+}
