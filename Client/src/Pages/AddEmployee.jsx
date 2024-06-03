@@ -8,6 +8,7 @@ import '../Styles/AddEmployee.css'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Components/Loading';
 
 const AddEmployee = () => {
 
@@ -20,6 +21,9 @@ const AddEmployee = () => {
         review: ""
     })
 
+    const [loading, setLoading] = useState(false);
+
+
     const handleInputs = (e) => {
         const { name, value } = e.target;
         setEmpData({
@@ -30,6 +34,7 @@ const AddEmployee = () => {
 
     const handleSubmit = async (e) => {
         try {
+            setLoading(true)
             e.preventDefault();
             const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/employee/addEmployee', empData, {
                 headers: {
@@ -48,6 +53,7 @@ const AddEmployee = () => {
                 })
                 navigate('/empData')
                 console.log('Emp Data : ', response.data);
+                setLoading(false)
             }
         } catch (error) {
             console.log('Add Employee Catch Error : ', error);
@@ -55,47 +61,52 @@ const AddEmployee = () => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className="title">
-                <h2>Add Empoyee</h2>
-            </div>
-            <form className='addEmpForm' onSubmit={handleSubmit}>
-                {
-                    addEmpData.map((currElem, index) => {
-                        const { name, label, type } = currElem;
-                        return (
-                            <div className='inputs' key={index}>
-                                <Input
-                                    key={index}
-                                    name={name}
-                                    id={label}
-                                    type={type}
-                                    onChange={handleInputs}
-                                    value={empData[index]}
-                                />
+       <>
+            {
+                loading ? <Loading /> :
+                    <div className='formContainer'>
+                        <div className="title">
+                            <h2>Add Empoyee</h2>
+                        </div>
+                        <form className='addEmpForm' onSubmit={handleSubmit}>
+                            {
+                                addEmpData.map((currElem, index) => {
+                                    const { name, label, type } = currElem;
+                                    return (
+                                        <div className='inputs' key={index}>
+                                            <Input
+                                                key={index}
+                                                name={name}
+                                                id={label}
+                                                type={type}
+                                                onChange={handleInputs}
+                                                value={empData[index]}
+                                            />
+                                        </div>
+
+                                    )
+                                })
+                            }
+
+                            <div className="inputs">
+                                <label htmlFor="department">Department</label>
+                                <select name='empDepartment' onChange={handleInputs}>
+                                    <option value=''>Select Option</option>
+                                    {
+                                        empDepartment.map((currElem, index) => {
+                                            const { label, department } = currElem;
+                                            return (
+                                                <option value={department} key={index}>{label}</option>
+                                            )
+                                        })
+                                    }
+                                </select>
                             </div>
-
-                        )
-                    })
-                }
-
-                <div className="inputs">
-                    <label htmlFor="department">Department</label>
-                    <select name='empDepartment' onChange={handleInputs}>
-                        <option value=''>Select Option</option>
-                        {
-                            empDepartment.map((currElem, index) => {
-                                const { label, department } = currElem;
-                                return (
-                                    <option value={department} key={index}>{label}</option>
-                                )
-                            })
-                        }
-                    </select>
-                </div>
-                <button type="submit">Add Emp</button>
-            </form >
-        </div >
+                            <button type="submit">Add Emp</button>
+                        </form >
+                    </div >
+            }
+        </>
     )
 }
 
