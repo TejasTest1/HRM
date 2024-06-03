@@ -7,7 +7,7 @@ const Areachart = () => {
 
     const handleGetEmpData = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/v1/employee/allEmployeeDatas');
+            const response = await axios.get('https://hrm-kclk.onrender.com/api/v1/employee/allEmployeeDatas');
 
             if (response.status === 200) {
                 setEmployeeData(response.data?.allEmployeeData);
