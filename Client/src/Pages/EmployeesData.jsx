@@ -3,6 +3,7 @@ import { empDepartment, empTableHead, reviews } from '../Utils/Utils'
 import axios from 'axios';
 import '../Styles/ExployeesData.css'
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Components/Loading';
 
 const EmployeesData = () => {
     const [employeeData, setEmployeeData] = useState([]);
@@ -11,15 +12,20 @@ const EmployeesData = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0)
 
+    const [loading, setLoading] = useState(false);
+
+
     const navigate = useNavigate();
 
     const handleGetEmpData = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`https://hrm-kclk.onrender.com/api/v1/employee/allEmployeeData?page=${currentPage}&limit=5`);
 
             if (response.status === 200) {
                 setEmployeeData(response.data?.employees);
                 setTotalPage(response.data?.totalPages)
+                setLoading(false)
             }
             console.log('All Emp Data : ', response.data);
         } catch (error) {
@@ -39,11 +45,13 @@ const EmployeesData = () => {
 
     const handleDeleteEmployee = async (id) => {
         try {
+            setLoading(true)
             const response = await axios.delete(`https://hrm-kclk.onrender.com/api/v1/employee/deleteEmployee/${id}`)
 
             if (response.status === 200) {
                 alert('Deleted');
                 handleGetEmpData();
+                setLoading(false)
             }
         } catch (error) {
             console.log('Unable to delete employee : ', error);
@@ -54,6 +62,7 @@ const EmployeesData = () => {
         const departmentFilter = e.target.value
 
         try {
+            setLoading(true)
             const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/filters/departments', { departmentFilter }, {
                 headers: {
                     "Content-Type": 'application/json'
@@ -62,10 +71,12 @@ const EmployeesData = () => {
 
             if (response.status === 200) {
                 setEmployeeData(response.data.filteredDepartment);
+                setLoading(false)
             }
 
             if (departmentFilter === 'All') {
                 await handleGetEmpData();
+                setLoading(false)
             }
         } catch (error) {
             console.log(error);
@@ -77,6 +88,7 @@ const EmployeesData = () => {
 
         console.log(reviewFilter);
         try {
+            setLoading(true)
             const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/filters/review', { reviewFilter }, {
                 headers: {
                     "Content-Type": 'application/json'
@@ -85,10 +97,12 @@ const EmployeesData = () => {
 
             if (response.status === 200) {
                 setEmployeeData(response.data.filteredDepartment);
+                setLoading(false)
             }
 
             if (reviewFilter == 0) {
                 await handleGetEmpData();
+                setLoading(false)
             }
         } catch (error) {
             console.log(error);
@@ -103,10 +117,12 @@ const EmployeesData = () => {
         e.preventDefault();
 
         try {
+            setLoading(true)
             const response = await axios.get(`https://hrm-kclk.onrender.com/api/v1/filters/search?query=${searchFilter}`);
 
             if (response.status === 200) {
                 setEmployeeData(response.data?.searchedResult)
+                setLoading(false)
             }
         } catch (error) {
             console.log('Unable to search :', error);
@@ -178,39 +194,42 @@ const EmployeesData = () => {
                 </div>
 
             </div>
-            <table className='empTable' border={1}>
-                <thead>
-                    <tr>
-                        {
-                            empTableHead.map((currElem, index) => {
-                                const { th } = currElem;
-                                return (
-                                    <th key={index}>{th}</th>
-                                )
-                            })
-                        }
+            {
+                loading ? <Loading /> :
+                    <table className='empTable' border={1}>
+                        <thead>
+                            <tr>
+                                {
+                                    empTableHead.map((currElem, index) => {
+                                        const { th } = currElem;
+                                        return (
+                                            <th key={index}>{th}</th>
+                                        )
+                                    })
+                                }
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        employeeData.map((currElem, index) => {
-                            const { empName, empDepartment, empSkills, experience, review, _id } = currElem;
-                            return (
-                                <tr>
-                                    <td>{empName}</td>
-                                    <td>{empDepartment}</td>
-                                    <td>{empSkills}</td>
-                                    <td>{experience}</td>
-                                    <td>{handleReviewStar(review)}</td>
-                                    <td className='tableControls' onClick={() => navigate(`/updateEmp/${_id}`)}>📝</td>
-                                    <td className='tableControls' onClick={() => handleDeleteEmployee(_id)}>🗑️</td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                employeeData.map((currElem, index) => {
+                                    const { empName, empDepartment, empSkills, experience, review, _id } = currElem;
+                                    return (
+                                        <tr>
+                                            <td>{empName}</td>
+                                            <td>{empDepartment}</td>
+                                            <td>{empSkills}</td>
+                                            <td>{experience}</td>
+                                            <td>{handleReviewStar(review)}</td>
+                                            <td className='tableControls' onClick={() => navigate(`/updateEmp/${_id}`)}>📝</td>
+                                            <td className='tableControls' onClick={() => handleDeleteEmployee(_id)}>🗑️</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+            }
             <div className="paginationButtons">
                 <div className="prev">
                     <button onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
