@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../Components/Loading'
 
 const UpdateEmployee = () => {
 
@@ -16,6 +17,8 @@ const UpdateEmployee = () => {
         experience: "",
         review: ""
     })
+
+    const [loading, setLoading] = useState(false);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -48,6 +51,7 @@ const UpdateEmployee = () => {
 
     const handleSubmit = async (e) => {
         try {
+            setLoading(true)
             e.preventDefault();
             const response = await axios.put(`https://hrm-kclk.onrender.com/api/v1/employee/updateEmployee/${id}`, empData, {
                 headers: {
@@ -66,6 +70,7 @@ const UpdateEmployee = () => {
                 })
                 navigate('/empData')
                 console.log('Emp Data : ', response.data);
+                setLoading(false)
             }
         } catch (error) {
             console.log('Add Employee Catch Error : ', error);
@@ -77,32 +82,37 @@ const UpdateEmployee = () => {
     }, [])
 
     return (
-        <div className='formContainer'>
-            <div className="title">
-                <h2>Add Empoyee</h2>
-            </div>
-            <form className='addEmpForm' onSubmit={handleSubmit}>
-                {
-                    addEmpData.map((currElem, index) => {
-                        const { name, label, type } = currElem;
-                        return (
-                            <div className='inputs' key={index}>
-                                <Input
-                                    key={index}
-                                    name={name}
-                                    id={label}
-                                    type={type}
-                                    onChange={handleInputs}
-                                    value={empData[name]}
-                                />
-                            </div>
+        <>
+            {
+                loading ? <Loading /> :
+                    <div className='formContainer'>
+                        <div className="title">
+                            <h2>Add Empoyee</h2>
+                        </div>
+                        <form className='addEmpForm' onSubmit={handleSubmit}>
+                            {
+                                addEmpData.map((currElem, index) => {
+                                    const { name, label, type } = currElem;
+                                    return (
+                                        <div className='inputs' key={index}>
+                                            <Input
+                                                key={index}
+                                                name={name}
+                                                id={label}
+                                                type={type}
+                                                onChange={handleInputs}
+                                                value={empData[name]}
+                                            />
+                                        </div>
 
-                        )
-                    })
-                }
-                <button type="submit">Update Emp</button>
-            </form >
-        </div >
+                                    )
+                                })
+                            }
+                            <button type="submit">Update Emp</button>
+                        </form >
+                    </div >
+            }
+        </>
     )
 }
 
