@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, BarChart, Bar, PieChart, Pie } from 'recharts';
+import Loading from './Loading';
 
 const Areachart = () => {
     const [employeeData, setEmployeeData] = useState([]);
