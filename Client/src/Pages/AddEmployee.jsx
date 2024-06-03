@@ -31,7 +31,7 @@ const AddEmployee = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post('http://localhost:3000/api/v1/employee/addEmployee', empData, {
+            const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/employee/addEmployee', empData, {
                 headers: {
                     "Content-Type": 'application/json'
                 }
