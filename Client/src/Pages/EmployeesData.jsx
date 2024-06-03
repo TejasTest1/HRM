@@ -15,7 +15,7 @@ const EmployeesData = () => {
 
     const handleGetEmpData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/v1/employee/allEmployeeData?page=${currentPage}&limit=5`);
+            const response = await axios.get(`https://hrm-kclk.onrender.com/api/v1/employee/allEmployeeData?page=${currentPage}&limit=5`);
 
             if (response.status === 200) {
                 setEmployeeData(response.data?.employees);
@@ -39,7 +39,7 @@ const EmployeesData = () => {
 
     const handleDeleteEmployee = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/v1/employee/deleteEmployee/${id}`)
+            const response = await axios.delete(`https://hrm-kclk.onrender.com/api/v1/employee/deleteEmployee/${id}`)
 
             if (response.status === 200) {
                 alert('Deleted');
@@ -54,7 +54,7 @@ const EmployeesData = () => {
         const departmentFilter = e.target.value
 
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/filters/departments', { departmentFilter }, {
+            const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/filters/departments', { departmentFilter }, {
                 headers: {
                     "Content-Type": 'application/json'
                 }
@@ -77,7 +77,7 @@ const EmployeesData = () => {
 
         console.log(reviewFilter);
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/filters/review', { reviewFilter }, {
+            const response = await axios.post('https://hrm-kclk.onrender.com/api/v1/filters/review', { reviewFilter }, {
                 headers: {
                     "Content-Type": 'application/json'
                 }
@@ -103,7 +103,7 @@ const EmployeesData = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.get(`http://localhost:3000/api/v1/filters/search?query=${searchFilter}`);
+            const response = await axios.get(`https://hrm-kclk.onrender.com/api/v1/filters/search?query=${searchFilter}`);
 
             if (response.status === 200) {
                 setEmployeeData(response.data?.searchedResult)
