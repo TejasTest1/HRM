@@ -30,7 +30,7 @@ const UpdateEmployee = () => {
 
     const getSingleEmployee = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/v1/employee/employeeData/${id}`);
+            const response = await axios.get(`https://hrm-kclk.onrender.com/api/v1/employee/employeeData/${id}`);
 
             const data = response.data?.singleEmployeeData;
 
@@ -49,7 +49,7 @@ const UpdateEmployee = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.put(`http://localhost:3000/api/v1/employee/updateEmployee/${id}`, empData, {
+            const response = await axios.put(`https://hrm-kclk.onrender.com/api/v1/employee/updateEmployee/${id}`, empData, {
                 headers: {
                     "Content-Type": 'application/json'
                 }
